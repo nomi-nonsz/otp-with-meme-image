@@ -32,7 +32,7 @@ def send_email():
 
         # message variable
         subject = "confirm your account"
-        msg = "your OTP code is"
+        msg = "Here's your email confirmation"
 
         zmail = MIMEMultipart()
         zmail['From'] = mail_sender
@@ -43,7 +43,8 @@ def send_email():
         zmail.attach(MIMEText(msg, 'plain'))
 
         # attach picure
-        pict = open('images/main/black-suit.png', 'rb').read();
+        add_textimg("Your otp code is " + str(randis))
+        pict = open("images/output/pos.png", "rb").read()
         zmail.attach(MIMEImage(pict, name="black man suit"))
 
         # creating context
@@ -56,4 +57,4 @@ def send_email():
         print("Failed to send a email")
         print(str(e))
 
-add_textimg("Your otp code is 3826")
+send_email()
