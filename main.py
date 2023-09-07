@@ -3,6 +3,8 @@ import random
 import ssl
 import smtplib
 
+from PIL import Image, ImageDraw, ImageFont
+
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
@@ -10,6 +12,19 @@ from email.mime.image import MIMEImage
 mail_sender = "norman25.projects2@gmail.com"
 mail_password = os.environ.get("EMAIL_PASSWORD_2")
 mail_receiver = "norman25.na@gmail.com"
+
+def add_textimg(text):
+    img = Image.open("images/main/black-suit.png")
+    draw = ImageDraw.Draw(img)
+    font = ImageFont.truetype("fonts/impact.ttf", 64)
+    text_pos_center = (img.width - draw.textlength(text, font)) // 2
+    pos = (text_pos_center, 720)
+    text_color = (255, 255, 255)
+    draw.text(pos, text, fill=text_color, font=font)
+    
+    img.save("images/output/pos.png")
+    img.close()
+
 
 def send_email():
     try:
@@ -41,4 +56,4 @@ def send_email():
         print("Failed to send a email")
         print(str(e))
 
-send_email()
+add_textimg("Your otp code is 3826")
