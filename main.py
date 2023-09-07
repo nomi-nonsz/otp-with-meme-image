@@ -30,7 +30,10 @@ def hello():
 
 @app.route('/send-otp', methods=['POST'])
 def send_email():
-    mail_sender = "norman25.projects2@gmail.com"
+    # Create an .env file at the root of this project
+    # There are two values required here, EMAIL_SENDER_2 and EMAIL_PASSWORD_2
+    # Or you can change the value here and in .env file
+    mail_sender = os.environ.get("EMAIL_SENDER_2")
     mail_password = os.environ.get("EMAIL_PASSWORD_2")
     mail_receiver = request.args.get('email')
 
