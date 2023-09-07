@@ -3,15 +3,14 @@ import random
 import ssl
 import smtplib
 
+from flask import Flask, jsonify, request
 from PIL import Image, ImageDraw, ImageFont
 
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 
-mail_sender = "norman25.projects2@gmail.com"
-mail_password = os.environ.get("EMAIL_PASSWORD_2")
-mail_receiver = "norman25.na@gmail.com"
+app = Flask(__name__)
 
 def add_textimg(text):
     img = Image.open("images/main/black-suit.png")
@@ -25,8 +24,21 @@ def add_textimg(text):
     img.save("images/output/pos.png")
     img.close()
 
+@app.route('/hello', methods=['GET'])
+def hello():
+    return "Hello"
 
+@app.route('/send-otp', methods=['POST'])
 def send_email():
+    mail_sender = "norman25.projects2@gmail.com"
+    mail_password = os.environ.get("EMAIL_PASSWORD_2")
+    mail_receiver = request.args.get('email')
+
+    if mail_receiver is None:
+        return jsonify({
+            "error": "You must include an email address param query to send to email"
+        }), 400
+
     try:
         randis = random.randint(1000, 9999)
 
@@ -53,8 +65,23 @@ def send_email():
         with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
             smtp.login(mail_sender, mail_password)
             smtp.sendmail(mail_sender, mail_receiver, zmail.as_string())
+
+        return jsonify({
+            "message": "Success sending email",
+            "email": {
+                "sender": mail_sender,
+                "receiver": mail_receiver,
+                "subject": subject,
+                "body": msg
+            }
+        })
     except Exception as e:
         print("Failed to send a email")
         print(str(e))
 
-send_email()
+        return jsonify({
+            "error": str(e)
+        }), 400
+
+if __name__ == '__main__':
+    app.run(debug=True)
