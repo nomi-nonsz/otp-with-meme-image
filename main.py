@@ -13,16 +13,32 @@ from email.mime.image import MIMEImage
 app = Flask(__name__)
 
 def add_textimg(text):
-    img = Image.open("images/main/black-suit.png")
-    draw = ImageDraw.Draw(img)
-    font = ImageFont.truetype("fonts/impact.ttf", 64)
-    text_pos_center = (img.width - draw.textlength(text, font)) // 2
-    pos = (text_pos_center, 720)
-    text_color = (255, 255, 255)
-    draw.text(pos, text, fill=text_color, font=font)
+    def generatePath():
+        some_id = random.randint(2000, 9000)
+        return f"images/output/pos-{str(some_id)}.png"
     
-    img.save("images/output/pos.png")
-    img.close()
+    path = generatePath()
+
+    try:
+        img = Image.open("images/main/black-suit.png")
+        draw = ImageDraw.Draw(img)
+        font = ImageFont.truetype("fonts/impact.ttf", 64)
+        text_pos_center = (img.width - draw.textlength(text, font)) // 2
+        pos = (text_pos_center, 720)
+        text_color = (255, 255, 255)
+        draw.text(pos, text, fill=text_color, font=font)
+
+        if not os.path.exists("images/output"):
+            os.mkdir("images/output")
+
+        while os.path.exists(path):
+            path = generatePath()
+        
+        img.save(path)
+        img.close()
+    except Exception as e:
+        print("Failed to add image")
+        print(str(e))
 
 @app.route('/hello', methods=['GET'])
 def hello():
@@ -39,6 +55,7 @@ def send_email():
 
     if mail_receiver is None:
         return jsonify({
+            "status": 400,
             "error": "You must include an email address param query to send to email"
         }), 400
 
@@ -60,7 +77,7 @@ def send_email():
         # attach picure
         add_textimg("Your otp code is " + str(randis))
         pict = open("images/output/pos.png", "rb").read()
-        zmail.attach(MIMEImage(pict, name="black man suit"))
+        zmail.attach(MIMEImage(pict, name="black-man-wearing-suit.png"))
 
         # creating context
         context = ssl.create_default_context()
@@ -70,6 +87,7 @@ def send_email():
             smtp.sendmail(mail_sender, mail_receiver, zmail.as_string())
 
         return jsonify({
+            "status": 200,
             "message": "Success sending email",
             "email": {
                 "sender": mail_sender,
