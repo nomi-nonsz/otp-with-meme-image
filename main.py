@@ -74,7 +74,7 @@ def send_email():
     # Everyone has a different email host service
     # By default we use gmail to test our emails
     mail_host = os.environ.get("HOST") if os.environ.get("HOST") is not None else "smtp.gmail.com"
-    mail_port = 465
+    mail_port = os.environ.get("PORT") if os.environ.get("PORT") is not None else 465
 
     if mail_sender is None or mail_password is None:
         return jsonify({

@@ -7,6 +7,9 @@ Leisure project. A REST API that sends a one-time authentication code (a.k.a OTP
 Setup:
 - Create a new `.env` file
 - Add your `EMAIL_SENDER` and `EMAIL_PASSWORD` in your `.env` file
+- Optional:
+    - By default I use gmail for email host, you can configure your `HOST` in the `.env` file.
+    - You can also add `PORT` in `.env`
 - Create or use an API test app like Postman
 
 Usage:
