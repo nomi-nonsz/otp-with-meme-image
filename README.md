@@ -1,12 +1,33 @@
 # OTP with meme image
 
-Leisure project. A REST API that sends a one-time authentication code (a.k.a OTP) but the code is in the text of a meme image.
+Leisure project. A REST API that sends a one-time authentication code (a.k.a OTP) to email, but the code is in the text of a meme image.
 
-## Summary
+## Usage
 
-If it works perfectly the result will be like this:
+Setup:
+- Create a new `.env` file
+- Add your `EMAIL_SENDER` and `EMAIL_PASSWORD` in your `.env` file
+- Create or use an API test app like Postman
 
-![Example Outpus](./docs/example.png)
+Usage:
+- Run `main.py`
+- Send a request to http://localhost:5000/send-otp with your `email`  query as email recipient. E.g: http://localhost:5000/send-top?email=your@email.com.
+- If successful then a response appears like this:
+    ```json
+    {
+        "email": {
+            "body": "Here's your email confirmation",
+            "receiver": "your.receiver@email.com",
+            "sender": "your.sender@email.com",
+            "subject": "confirm your account"
+        },
+        "message": "Success sending email",
+        "status": 200
+    }
+    ```
+- Now if you look at the recipient's email, it will be the image that was sent:
+
+    ![Example Outpus](./docs/example.png)
 
 ## Why this meme?
 

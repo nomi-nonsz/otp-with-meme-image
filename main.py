@@ -47,10 +47,10 @@ def hello():
 @app.route('/send-otp', methods=['POST'])
 def send_email():
     # Create an .env file at the root of this project
-    # There are two values required here, EMAIL_SENDER_2 and EMAIL_PASSWORD_2
+    # There are two values required here, EMAIL_SENDER and EMAIL_PASSWORD
     # Or you can change the value here and in .env file
-    mail_sender = os.environ.get("EMAIL_SENDER_2")
-    mail_password = os.environ.get("EMAIL_PASSWORD_2")
+    mail_sender = os.environ.get("EMAIL_SENDER")
+    mail_password = os.environ.get("EMAIL_PASSWORD")
     mail_receiver = request.args.get('email')
 
     if mail_receiver is None:
