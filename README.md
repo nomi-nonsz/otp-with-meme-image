@@ -11,7 +11,7 @@ Setup:
 
 Usage:
 - Run `main.py`
-- Send a request to http://localhost:5000/send-otp with your `email`  query as email recipient. E.g: http://localhost:5000/send-top?email=your@email.com.
+- Send a request to http://localhost:5000/send-otp with your `email`  query as email recipient. E.g: http://localhost:5000/send-otp?email=your@email.com.
 - If successful then a response appears like this:
     ```json
     {

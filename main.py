@@ -12,7 +12,7 @@ from email.mime.image import MIMEImage
 
 app = Flask(__name__)
 
-def add_textimg(text):
+def add_textimg(text, code):
     def generatePath():
         some_id = random.randint(2000, 9000)
         return f"images/output/pos-{str(some_id)}.png"
@@ -22,11 +22,19 @@ def add_textimg(text):
     try:
         img = Image.open("images/main/black-suit.png")
         draw = ImageDraw.Draw(img)
-        font = ImageFont.truetype("fonts/impact.ttf", 64)
-        text_pos_center = (img.width - draw.textlength(text, font)) // 2
-        pos = (text_pos_center, 720)
+        font = ImageFont.truetype("fonts/impact.ttf", 52)
+
+        text_pos1_center = (img.width - draw.textlength(text, font)) // 2
+        text_pos2_center = (img.width - draw.textlength(code, font)) // 2
+
+        text_pos_bottom = img.height
+
+        pos1 = (text_pos1_center, text_pos_bottom - 200)
+        pos2 = (text_pos2_center, text_pos_bottom - 130)
         text_color = (255, 255, 255)
-        draw.text(pos, text, fill=text_color, font=font)
+
+        draw.text(pos1, text, fill=text_color, font=font)
+        draw.text(pos2, code, fill=text_color, font=font)
 
         if not os.path.exists("images/output"):
             os.mkdir("images/output")
@@ -43,6 +51,19 @@ def add_textimg(text):
 @app.route('/hello', methods=['GET'])
 def hello():
     return "Hello"
+
+@app.route('/test/otp', methods=['POST'])
+def generate_otp():
+    try:
+        randis = random.randint(1000, 9999)
+        add_textimg(f"Your confirmation code is", str(randis))
+
+        return jsonify({"status": "ok"})
+    except Exception as e:
+        print("Something went wrong")
+        print(str(e))
+
+        return jsonify({"error": str(e)})
 
 @app.route('/send-otp', methods=['POST'])
 def send_email():
@@ -75,7 +96,7 @@ def send_email():
         zmail.attach(MIMEText(msg, 'plain'))
 
         # attach picure
-        add_textimg("Your otp code is " + str(randis))
+        add_textimg(f"Your confirmation code is", str(randis))
         pict = open("images/output/pos.png", "rb").read()
         zmail.attach(MIMEImage(pict, name="black-man-wearing-suit.png"))
 
