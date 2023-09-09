@@ -67,6 +67,17 @@ def send_email():
     mail_password = os.environ.get("EMAIL_PASSWORD")
     mail_receiver = request.args.get('email')
 
+    # Everyone has a different email host service
+    # By default we use gmail to test our emails
+    mail_host = os.environ.get("HOST") if os.environ.get("HOST") is not None else "smtp.gmail.com"
+    mail_port = 465
+
+    if mail_sender is None and mail_password is None:
+        return jsonify({
+            "status": 400,
+            "error": "Bro did you forget to add the sender email and email password variables in the .env file?"
+        }), 400
+
     if mail_receiver is None:
         return jsonify({
             "status": 400,
@@ -96,7 +107,9 @@ def send_email():
         # creating context
         context = ssl.create_default_context()
 
-        with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+        # if SSL is a different version, maybe try not using SSL
+        # with smtplib.SMTP(mail_host, mail_port) as smtp:
+        with smtplib.SMTP_SSL(mail_host, mail_port, context=context) as smtp:
             smtp.login(mail_sender, mail_password)
             smtp.sendmail(mail_sender, mail_receiver, zmail.as_string())
 
