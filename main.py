@@ -37,9 +37,13 @@ def add_textimg(text, code):
         
         img.save(path)
         img.close()
+
+        return open(f"images/output/pos-{str(code)}.jpg", "rb").read()
     except Exception as e:
         print("Failed to add image")
         print(str(e))
+
+        return None
 
 @app.route('/hello', methods=['GET'])
 def hello():
@@ -72,7 +76,7 @@ def send_email():
     mail_host = os.environ.get("HOST") if os.environ.get("HOST") is not None else "smtp.gmail.com"
     mail_port = 465
 
-    if mail_sender is None and mail_password is None:
+    if mail_sender is None or mail_password is None:
         return jsonify({
             "status": 400,
             "error": "Bro did you forget to add the sender email and email password variables in the .env file?"
@@ -88,8 +92,9 @@ def send_email():
         randis = random.randint(1000, 9999)
 
         # message variable
-        subject = "confirm your account"
-        msg = "Here's your email confirmation"
+        subject = "Confirm your account"
+        msg = """Here's your email confirmation code
+if you're not the one doing this just ignore it"""
 
         zmail = MIMEMultipart()
         zmail['From'] = mail_sender
@@ -100,8 +105,7 @@ def send_email():
         zmail.attach(MIMEText(msg, 'plain'))
 
         # attach picure
-        add_textimg("Your verification code is", str(randis))
-        pict = open(f"images/output/pos-{str(randis)}.jpg", "rb").read()
+        pict = add_textimg("Your verification code is", str(randis))
         zmail.attach(MIMEImage(pict, name="black-man-wearing-suit.jpg"))
 
         # creating context
