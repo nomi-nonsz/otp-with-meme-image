@@ -1,8 +1,12 @@
 # OTP with meme image
 
-Leisure project. A REST API that sends a one-time authentication code (a.k.a OTP) to email, but the code is in the text of a meme image.
+Idk why i made this. A REST API that sends a one-time authentication code (a.k.a OTP) to email, but the code is in the text of a meme image. One of the projects that gives me a break from schoolwork
 
 ## Usage
+
+
+Packages required:
+- flask
 
 Setup:
 - Create a new `.env` file

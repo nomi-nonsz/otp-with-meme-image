@@ -79,7 +79,7 @@ def send_email():
     if mail_sender is None or mail_password is None:
         return jsonify({
             "status": 400,
-            "error": "Bro did you forget to add the sender email and email password variables in the .env file?"
+            "error": "Bro did you forget to add the sender email and email password variables?"
         }), 400
 
     if mail_receiver is None:
