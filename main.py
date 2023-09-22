@@ -12,14 +12,25 @@ from email.mime.image import MIMEImage
 
 app = Flask(__name__)
 
-INPUT_IMG_PATH = "images/main/shannon.jpg"
-OUTPUT_IMG_NAME = "black-man-wearing-suit.jpg"
+INPUT_IMG_PATH = "images/main/shannon.jpg" # image path
+OUTPUT_IMG_NAME = "black-man-wearing-suit.jpg" # name of the file to be added in the email
+
+# this is actually useless cuz Pillow has provided a thumbnail function to keep the aspect ratio
+def resize(in_width, in_height):
+    out_width = 270
+    out_height = in_height * (out_width / in_width)
+    out_size = (int(out_width), int(out_height))
+
+    return out_size
 
 def add_textimg(text, code):
     path = f"images/output/pos-{str(code)}.jpg"
 
     try:
         img = Image.open(INPUT_IMG_PATH)
+        new_size = resize(img.width, img.height)
+        img = img.resize(new_size)
+
         draw = ImageDraw.Draw(img)
         font = ImageFont.truetype("fonts/impact.ttf", 24)
 
