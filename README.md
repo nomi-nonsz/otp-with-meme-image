@@ -32,9 +32,10 @@ Usage:
         "status": 200
     }
     ```
-- Now if you look at the recipient's email, it will be the image that was sent:
+- Now if you look at the recipient's email, it will be the image that was sent, for example:
 
-    ![Example Outpus](./docs/example.png)
+    ![Example Output 1](./docs/example.jpg)
+    ![Example Output 2](./docs/example2.jpg)
 
 ## Why this meme?
 
