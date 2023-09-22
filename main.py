@@ -12,11 +12,14 @@ from email.mime.image import MIMEImage
 
 app = Flask(__name__)
 
+INPUT_IMG_PATH = "images/main/shannon.jpg"
+OUTPUT_IMG_NAME = "black-man-wearing-suit.jpg"
+
 def add_textimg(text, code):
     path = f"images/output/pos-{str(code)}.jpg"
 
     try:
-        img = Image.open("images/main/shannon.jpg")
+        img = Image.open(INPUT_IMG_PATH)
         draw = ImageDraw.Draw(img)
         font = ImageFont.truetype("fonts/impact.ttf", 24)
 
@@ -106,7 +109,7 @@ if you're not the one doing this just ignore it"""
 
         # attach picure
         pict = add_textimg("Your verification code is", str(randis))
-        zmail.attach(MIMEImage(pict, name="black-man-wearing-suit.jpg"))
+        zmail.attach(MIMEImage(pict, name=OUTPUT_IMG_NAME))
 
         # creating context
         context = ssl.create_default_context()
