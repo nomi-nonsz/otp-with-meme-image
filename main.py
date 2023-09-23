@@ -2,6 +2,7 @@ import os
 import random
 import ssl
 import smtplib
+from dotenv import load_dotenv
 
 from flask import Flask, jsonify, request
 from PIL import Image, ImageDraw, ImageFont
@@ -10,6 +11,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 
+load_dotenv()
 app = Flask(__name__)
 
 INPUT_IMG_PATH = "images/main/shannon.jpg" # image path
@@ -81,14 +83,14 @@ def send_email():
     # Create an .env file at the root of this project
     # There are two values required here, EMAIL_SENDER and EMAIL_PASSWORD
     # Or you can change the value here and in .env file
-    mail_sender = os.environ.get("EMAIL_SENDER")
-    mail_password = os.environ.get("EMAIL_PASSWORD")
+    mail_sender = os.getenv("EMAIL_SENDER")
+    mail_password = os.getenv("EMAIL_PASSWORD")
     mail_receiver = request.args.get('email')
 
     # Everyone has a different email host service
     # By default we use gmail to test our emails
-    mail_host = os.environ.get("HOST") if os.environ.get("HOST") is not None else "smtp.gmail.com"
-    mail_port = os.environ.get("PORT") if os.environ.get("PORT") is not None else 465
+    mail_host = os.getenv("HOST") if os.getenv("HOST") is not None else "smtp.gmail.com"
+    mail_port = os.getenv("PORT") if os.getenv("PORT") is not None else 465
 
     if mail_sender is None or mail_password is None:
         return jsonify({

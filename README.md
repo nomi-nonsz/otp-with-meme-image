@@ -7,6 +7,7 @@ Idk why i made this. A REST API that sends a one-time authentication code (a.k.a
 
 Packages required:
 - flask
+- python-dotenv
 
 Setup:
 - Create a new `.env` file
